@@ -4,6 +4,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import CreateTaskDialog from "@/components/task/CreateTaskDialog";
 import { Column } from "@/types/kanban";
 import { useDroppable } from "@dnd-kit/core";
+import { Button } from "@/components/ui/button";
 
 interface BoardColumnProps {
   column: Column;
@@ -15,6 +16,7 @@ interface BoardColumnProps {
     description: string
   ) => void;
   onDeleteTask: (columnId: string, taskId: string) => void;
+  onDeleteColumn: (columnId: string) => void;
 }
 
 export default function BoardColumn({
@@ -22,6 +24,7 @@ export default function BoardColumn({
   onCreateTask,
   onUpdateTask,
   onDeleteTask,
+  onDeleteColumn,
 }: BoardColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
@@ -37,9 +40,19 @@ export default function BoardColumn({
             {column.tasks.length} tasks
         </p>
 
-        <CreateTaskDialog
-          onCreateTask={(title) => onCreateTask(column.id, title)}
-        />
+        <div className="flex gap-2">
+          <CreateTaskDialog
+            onCreateTask={(title) => onCreateTask(column.id, title)}
+          />
+
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDeleteColumn(column.id)}
+          >
+            Delete
+          </Button>
+        </div>
       </CardHeader>
 
       <SortableContext

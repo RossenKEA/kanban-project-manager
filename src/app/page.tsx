@@ -186,6 +186,12 @@ export default function Home() {
     ]);
   }
 
+  function handleDeleteColumn(columnId: string) {
+    setColumns((currentColumns) =>
+      currentColumns.filter((column) => column.id !== columnId)
+    );
+  }
+
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
@@ -209,6 +215,7 @@ export default function Home() {
                 onCreateTask={handleCreateTask}
                 onUpdateTask={handleUpdateTask}
                 onDeleteTask={handleDeleteTask}
+                onDeleteColumn={handleDeleteColumn}
               />
             ))}
           </section>
