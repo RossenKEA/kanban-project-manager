@@ -192,6 +192,19 @@ export default function Home() {
     );
   }
 
+  function handleRenameColumn(columnId: string, title: string) {
+    setColumns((currentColumns) =>
+      currentColumns.map((column) =>
+        column.id === columnId
+          ? {
+              ...column,
+              title,
+            }
+          : column
+      )
+    );
+  }
+
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
@@ -216,6 +229,7 @@ export default function Home() {
                 onUpdateTask={handleUpdateTask}
                 onDeleteTask={handleDeleteTask}
                 onDeleteColumn={handleDeleteColumn}
+                onRenameColumn={handleRenameColumn}
               />
             ))}
           </section>
