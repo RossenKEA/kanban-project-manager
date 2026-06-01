@@ -11,7 +11,8 @@ interface SortableTaskCardProps {
     taskId: string,
     title: string,
     description: string,
-    priority: "Low" | "Medium" | "High"
+    priority: "Low" | "Medium" | "High",
+    dueDate: string
   ) => void;
   onDeleteTask: (taskId: string) => void;
 }

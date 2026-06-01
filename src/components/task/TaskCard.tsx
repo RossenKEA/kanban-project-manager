@@ -18,7 +18,8 @@ interface TaskCardProps {
     taskId: string,
     title: string,
     description: string,
-    priority: "Low" | "Medium" | "High"
+    priority: "Low" | "Medium" | "High",
+    dueDate: string
   ) => void;
   onDeleteTask: (taskId: string) => void;
 }
@@ -34,11 +35,12 @@ export default function TaskCard({
   const [priority, setPriority] = useState<"Low" | "Medium" | "High">(
     task.priority ?? "Medium"
   );
+  const [dueDate, setDueDate] = useState(task.dueDate ?? "");
 
   function handleSave() {
     if (!title.trim()) return;
 
-    onUpdateTask(task.id, title, description, priority);
+    onUpdateTask(task.id, title, description, priority, dueDate);
     setOpen(false);
   }
 
@@ -58,6 +60,13 @@ export default function TaskCard({
             {task.priority}
           </span>
         )}
+
+        {task.dueDate && (
+          <p className="mt-2 text-xs text-zinc-500">
+            Due {task.dueDate}
+          </p>
+        )}
+
         <p>{task.title}</p>
 
         {task.description && (
@@ -96,6 +105,15 @@ export default function TaskCard({
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>
+
+            <div className="relative">
+              <Input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="bg-zinc-950 border-zinc-800 text-zinc-100 [color-scheme:dark]"
+              />
+            </div>
 
             <div className="flex justify-between">
               <Button variant="destructive" onClick={handleDelete}>
