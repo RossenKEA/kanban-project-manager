@@ -8,7 +8,7 @@ interface BoardColumnProps {
 
 export default function BoardColumn({ column }: BoardColumnProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-zinc-900 border-zinc-800 text-zinc-200">
       <CardHeader>
         <CardTitle>{column.title}</CardTitle>
       </CardHeader>
