@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { mockColumns } from "@/data/mock-board";
 import { Column } from "@/types/kanban";
+import ClientOnly from "@/components/ClientOnly";
 
 export default function Home() {
   const [columns, setColumns] = useState<Column[]>(mockColumns);
@@ -217,21 +218,23 @@ export default function Home() {
           <Button onClick={handleCreateColumn}>Add Column</Button>
         </header>
 
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <section className="flex gap-6 overflow-x-auto pb-4">
-            {columns.map((column) => (
-              <BoardColumn
-                key={column.id}
-                column={column}
-                onCreateTask={handleCreateTask}
-                onUpdateTask={handleUpdateTask}
-                onDeleteTask={handleDeleteTask}
-                onDeleteColumn={handleDeleteColumn}
-                onRenameColumn={handleRenameColumn}
-              />
-            ))}
-          </section>
-        </DndContext>
+        <ClientOnly>
+          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+            <section className="flex gap-6 overflow-x-auto pb-4">
+              {columns.map((column) => (
+                <BoardColumn
+                  key={column.id}
+                  column={column}
+                  onCreateTask={handleCreateTask}
+                  onUpdateTask={handleUpdateTask}
+                  onDeleteTask={handleDeleteTask}
+                  onDeleteColumn={handleDeleteColumn}
+                  onRenameColumn={handleRenameColumn}
+                />
+              ))}
+            </section>
+          </DndContext>
+        </ClientOnly>
       </div>
     </main>
   );
