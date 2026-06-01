@@ -1,4 +1,6 @@
-export const mockColumns = [
+import { Column } from "@/types/kanban";
+
+export const mockColumns: Column[] = [
     {
         id: "todo",
         title: "Todo",
@@ -7,11 +9,13 @@ export const mockColumns = [
                 id: "1",
                 title: "Create project structure",
                 description: "Set up folders for components, data, types, and utilities.",
+                priority: "High",
             },
             {
                 id: "2",
                 title: "Design board UI",
-                description: "Set up folders for components, data, types, and utilities.",
+                description: "Design a cool UI with fimga!",
+                priority: "Medium",
             },
         ],
     },
@@ -22,7 +26,8 @@ export const mockColumns = [
             {
                 id: "3",
                 title: "Build Kanban page",
-                description: "Set up folders for components, data, types, and utilities.",
+                description: "Set up data, and types.",
+                priority: "Low",
             },
         ],
     },
@@ -33,7 +38,8 @@ export const mockColumns = [
             {
                 id: "4",
                 title: "Set up Next.js",
-                description: "Set up folders for components, data, types, and utilities.",
+                description: "Open the terminal and run the correct command.",
+                priority: "Medium",
             },
         ],
     },
