@@ -28,6 +28,45 @@ export default function Home() {
     );
   }
 
+  function handleUpdateTask(
+    columnId: string,
+    taskId: string,
+    title: string,
+    description: string
+  ) {
+    setColumns((currentColumns) =>
+      currentColumns.map((column) => {
+        if (column.id !== columnId) return column;
+
+        return {
+          ...column,
+          tasks: column.tasks.map((task) =>
+            task.id === taskId
+              ? {
+                  ...task,
+                  title,
+                  description,
+                }
+              : task
+          ),
+        };
+      })
+    );
+  }
+
+function handleDeleteTask(columnId: string, taskId: string) {
+  setColumns((currentColumns) =>
+    currentColumns.map((column) => {
+      if (column.id !== columnId) return column;
+
+      return {
+        ...column,
+        tasks: column.tasks.filter((task) => task.id !== taskId),
+      };
+    })
+  );
+}
+
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-50 p-8">
       <div className="mx-auto max-w-7xl">
@@ -48,6 +87,8 @@ export default function Home() {
               key={column.id}
               column={column}
               onCreateTask={handleCreateTask}
+              onUpdateTask={handleUpdateTask}
+              onDeleteTask={handleDeleteTask}
             />
           ))}
         </section>

@@ -6,11 +6,20 @@ import { Column } from "@/types/kanban";
 interface BoardColumnProps {
   column: Column;
   onCreateTask: (columnId: string, title: string) => void;
+  onUpdateTask: (
+    columnId: string,
+    taskId: string,
+    title: string,
+    description: string
+  ) => void;
+  onDeleteTask: (columnId: string, taskId: string) => void;
 }
 
 export default function BoardColumn({
   column,
   onCreateTask,
+  onUpdateTask,
+  onDeleteTask,
 }: BoardColumnProps) {
   return (
     <Card className="w-80 shrink-0 bg-zinc-900 border-zinc-800">
@@ -30,7 +39,14 @@ export default function BoardColumn({
 
       <CardContent className="space-y-3">
         {column.tasks.map((task) => (
-          <TaskCard key={task.id} title={task.title} />
+            <TaskCard
+                key={task.id}
+                task={task}
+                onUpdateTask={(taskId, title, description) =>
+                    onUpdateTask(column.id, taskId, title, description)
+                }
+                onDeleteTask={(taskId) => onDeleteTask(column.id, taskId)}
+            />
         ))}
       </CardContent>
     </Card>

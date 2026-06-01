@@ -6,10 +6,12 @@ export const mockColumns = [
             {
                 id: "1",
                 title: "Create project structure",
+                description: "Set up folders for components, data, types, and utilities.",
             },
             {
                 id: "2",
                 title: "Design board UI",
+                description: "Set up folders for components, data, types, and utilities.",
             },
         ],
     },
@@ -20,6 +22,7 @@ export const mockColumns = [
             {
                 id: "3",
                 title: "Build Kanban page",
+                description: "Set up folders for components, data, types, and utilities.",
             },
         ],
     },
@@ -30,6 +33,7 @@ export const mockColumns = [
             {
                 id: "4",
                 title: "Set up Next.js",
+                description: "Set up folders for components, data, types, and utilities.",
             },
         ],
     },
