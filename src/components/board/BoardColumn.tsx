@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import TaskCard from "@/components/task/TaskCard";
+import SortableTaskCard from "@/components/task/SortableTaskCard";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import CreateTaskDialog from "@/components/task/CreateTaskDialog";
 import { Column } from "@/types/kanban";
 
@@ -37,18 +38,23 @@ export default function BoardColumn({
         />
       </CardHeader>
 
-      <CardContent className="space-y-3">
-        {column.tasks.map((task) => (
-            <TaskCard
-                key={task.id}
-                task={task}
-                onUpdateTask={(taskId, title, description) =>
-                    onUpdateTask(column.id, taskId, title, description)
-                }
-                onDeleteTask={(taskId) => onDeleteTask(column.id, taskId)}
+      <SortableContext
+        items={column.tasks.map((task) => task.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <CardContent className="space-y-3">
+          {column.tasks.map((task) => (
+            <SortableTaskCard
+              key={task.id}
+              task={task}
+              onUpdateTask={(taskId, title, description) =>
+                onUpdateTask(column.id, taskId, title, description)
+              }
+              onDeleteTask={(taskId) => onDeleteTask(column.id, taskId)}
             />
-        ))}
-      </CardContent>
+          ))}
+        </CardContent>
+      </SortableContext>
     </Card>
   );
 }
