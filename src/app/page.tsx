@@ -1,6 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+
 import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { mockColumns } from "@/data/mock-board";
@@ -8,6 +17,101 @@ import { Column } from "@/types/kanban";
 
 export default function Home() {
   const [columns, setColumns] = useState<Column[]>(mockColumns);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  function findColumnByTaskId(taskId: string) {
+    return columns.find((column) =>
+      column.tasks.some((task) => task.id === taskId)
+    );
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    const activeTaskId = active.id.toString();
+    const overTaskId = over.id.toString();
+
+    if (activeTaskId === overTaskId) return;
+
+    const activeColumn = findColumnByTaskId(activeTaskId);
+    const overColumn = findColumnByTaskId(overTaskId);
+
+    if (!activeColumn || !overColumn) return;
+
+    if (activeColumn.id === overColumn.id) {
+      setColumns((currentColumns) =>
+        currentColumns.map((column) => {
+          if (column.id !== activeColumn.id) return column;
+
+          const oldIndex = column.tasks.findIndex(
+            (task) => task.id === activeTaskId
+          );
+          const newIndex = column.tasks.findIndex(
+            (task) => task.id === overTaskId
+          );
+
+          return {
+            ...column,
+            tasks: arrayMove(column.tasks, oldIndex, newIndex),
+          };
+        })
+      );
+
+      return;
+    }
+
+    setColumns((currentColumns) => {
+      const sourceColumn = currentColumns.find((column) =>
+        column.tasks.some((task) => task.id === activeTaskId)
+      );
+
+      const destinationColumn = currentColumns.find((column) =>
+        column.tasks.some((task) => task.id === overTaskId)
+      );
+
+      if (!sourceColumn || !destinationColumn) return currentColumns;
+
+      const activeTask = sourceColumn.tasks.find(
+        (task) => task.id === activeTaskId
+      );
+
+      if (!activeTask) return currentColumns;
+
+      const destinationIndex = destinationColumn.tasks.findIndex(
+        (task) => task.id === overTaskId
+      );
+
+      return currentColumns.map((column) => {
+        if (column.id === sourceColumn.id) {
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== activeTaskId),
+          };
+        }
+
+        if (column.id === destinationColumn.id) {
+          const newTasks = [...column.tasks];
+          newTasks.splice(destinationIndex, 0, activeTask);
+
+          return {
+            ...column,
+            tasks: newTasks,
+          };
+        }
+
+        return column;
+      });
+    });
+  }
 
   function handleCreateTask(columnId: string, title: string) {
     setColumns((currentColumns) =>
@@ -54,21 +158,21 @@ export default function Home() {
     );
   }
 
-function handleDeleteTask(columnId: string, taskId: string) {
-  setColumns((currentColumns) =>
-    currentColumns.map((column) => {
-      if (column.id !== columnId) return column;
+  function handleDeleteTask(columnId: string, taskId: string) {
+    setColumns((currentColumns) =>
+      currentColumns.map((column) => {
+        if (column.id !== columnId) return column;
 
-      return {
-        ...column,
-        tasks: column.tasks.filter((task) => task.id !== taskId),
-      };
-    })
-  );
-}
+        return {
+          ...column,
+          tasks: column.tasks.filter((task) => task.id !== taskId),
+        };
+      })
+    );
+  }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-50 p-8">
+    <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex items-center justify-between">
           <div>
@@ -81,17 +185,19 @@ function handleDeleteTask(columnId: string, taskId: string) {
           <Button>Create Board</Button>
         </header>
 
-        <section className="flex gap-6 overflow-x-auto pb-4">
-          {columns.map((column) => (
-            <BoardColumn
-              key={column.id}
-              column={column}
-              onCreateTask={handleCreateTask}
-              onUpdateTask={handleUpdateTask}
-              onDeleteTask={handleDeleteTask}
-            />
-          ))}
-        </section>
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+          <section className="flex gap-6 overflow-x-auto pb-4">
+            {columns.map((column) => (
+              <BoardColumn
+                key={column.id}
+                column={column}
+                onCreateTask={handleCreateTask}
+                onUpdateTask={handleUpdateTask}
+                onDeleteTask={handleDeleteTask}
+              />
+            ))}
+          </section>
+        </DndContext>
       </div>
     </main>
   );
