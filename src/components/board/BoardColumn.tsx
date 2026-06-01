@@ -13,7 +13,7 @@ export default function BoardColumn({
   onCreateTask,
 }: BoardColumnProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-zinc-900 border-zinc-800 text-zinc-300">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>{column.title}</CardTitle>
 
