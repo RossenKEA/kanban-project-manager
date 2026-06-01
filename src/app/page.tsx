@@ -1,8 +1,33 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { mockColumns } from "@/data/mock-board";
+import { Column } from "@/types/kanban";
 
 export default function Home() {
+  const [columns, setColumns] = useState<Column[]>(mockColumns);
+
+  function handleCreateTask(columnId: string, title: string) {
+    setColumns((currentColumns) =>
+      currentColumns.map((column) => {
+        if (column.id !== columnId) return column;
+
+        return {
+          ...column,
+          tasks: [
+            ...column.tasks,
+            {
+              id: crypto.randomUUID(),
+              title,
+            },
+          ],
+        };
+      })
+    );
+  }
+
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-50 p-8">
       <div className="mx-auto max-w-7xl">
@@ -18,8 +43,12 @@ export default function Home() {
         </header>
 
         <section className="grid gap-6 md:grid-cols-3">
-          {mockColumns.map((column) => (
-            <BoardColumn key={column.id} column={column} />
+          {columns.map((column) => (
+            <BoardColumn
+              key={column.id}
+              column={column}
+              onCreateTask={handleCreateTask}
+            />
           ))}
         </section>
       </div>
