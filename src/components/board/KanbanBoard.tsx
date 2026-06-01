@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
+import { createTask } from "@/app/actions";
 
 interface KanbanBoardProps {
   initialColumns: Column[];
@@ -121,24 +122,25 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
     });
   }
 
-  function handleCreateTask(columnId: string, title: string) {
+  async function handleCreateTask(columnId: string, title: string) {
+    const newTask = {
+      id: crypto.randomUUID(),
+      title,
+      priority: "Medium" as const,
+    };
+
     setColumns((currentColumns) =>
       currentColumns.map((column) => {
         if (column.id !== columnId) return column;
 
         return {
           ...column,
-          tasks: [
-            ...column.tasks,
-            {
-              id: crypto.randomUUID(),
-              title,
-              priority: "Medium",
-            },
-          ],
+          tasks: [...column.tasks, newTask],
         };
       })
     );
+
+    await createTask(columnId, title);
   }
 
   function handleUpdateTask(
