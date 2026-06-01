@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, } from "@/app/actions";
 
 interface KanbanBoardProps {
   initialColumns: Column[];
@@ -169,7 +169,10 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
     await updateTask(taskId, title, description, priority, dueDate);
   }
 
-  function handleDeleteTask(columnId: string, taskId: string) {
+  async function handleDeleteTask(
+  columnId: string,
+  taskId: string
+  ) {
     setColumns((currentColumns) =>
       currentColumns.map((column) => {
         if (column.id !== columnId) return column;
@@ -180,6 +183,8 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
         };
       })
     );
+
+    await deleteTaskAction(taskId);
   }
 
   function handleCreateColumn() {

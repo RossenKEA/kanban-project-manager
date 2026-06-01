@@ -43,3 +43,13 @@ export async function updateTask(
 
     revalidatePath("/");
 }
+
+export async function deleteTask(taskId: string) {
+    await prisma.task.delete({
+        where: {
+            id: taskId,
+        },
+    });
+
+    revalidatePath("/");
+}
