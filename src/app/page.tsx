@@ -141,7 +141,8 @@ export default function Home() {
     columnId: string,
     taskId: string,
     title: string,
-    description: string
+    description: string,
+    priority: "Low" | "Medium" | "High"
   ) {
     setColumns((currentColumns) =>
       currentColumns.map((column) => {
@@ -151,11 +152,7 @@ export default function Home() {
           ...column,
           tasks: column.tasks.map((task) =>
             task.id === taskId
-              ? {
-                  ...task,
-                  title,
-                  description,
-                }
+              ? { ...task, title, description, priority }
               : task
           ),
         };

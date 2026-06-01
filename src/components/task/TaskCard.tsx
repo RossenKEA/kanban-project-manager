@@ -14,7 +14,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 interface TaskCardProps {
   task: Task;
-  onUpdateTask: (taskId: string, title: string, description: string) => void;
+  onUpdateTask: (
+    taskId: string,
+    title: string,
+    description: string,
+    priority: "Low" | "Medium" | "High"
+  ) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
@@ -26,11 +31,14 @@ export default function TaskCard({
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? "");
+  const [priority, setPriority] = useState<"Low" | "Medium" | "High">(
+    task.priority ?? "Medium"
+  );
 
   function handleSave() {
     if (!title.trim()) return;
 
-    onUpdateTask(task.id, title, description);
+    onUpdateTask(task.id, title, description, priority);
     setOpen(false);
   }
 
@@ -76,6 +84,18 @@ export default function TaskCard({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
             />
+
+            <select
+              value={priority}
+              onChange={(e) =>
+                setPriority(e.target.value as "Low" | "Medium" | "High")
+              }
+              className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
 
             <div className="flex justify-between">
               <Button variant="destructive" onClick={handleDelete}>

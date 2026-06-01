@@ -15,7 +15,8 @@ interface BoardColumnProps {
     columnId: string,
     taskId: string,
     title: string,
-    description: string
+    description: string,
+    priority: "Low" | "Medium" | "High"
   ) => void;
   onDeleteTask: (columnId: string, taskId: string) => void;
   onDeleteColumn: (columnId: string) => void;
@@ -97,8 +98,14 @@ export default function BoardColumn({
             <SortableTaskCard
               key={task.id}
               task={task}
-              onUpdateTask={(taskId, title, description) =>
-                onUpdateTask(column.id, taskId, title, description)
+              onUpdateTask={(taskId, title, description, priority) =>
+                onUpdateTask(
+                  column.id,
+                  taskId,
+                  title,
+                  description,
+                  priority
+                )
               }
               onDeleteTask={(taskId) => onDeleteTask(column.id, taskId)}
             />

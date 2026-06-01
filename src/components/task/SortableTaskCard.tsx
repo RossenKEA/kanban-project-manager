@@ -7,7 +7,12 @@ import TaskCard from "./TaskCard";
 
 interface SortableTaskCardProps {
   task: Task;
-  onUpdateTask: (taskId: string, title: string, description: string) => void;
+  onUpdateTask: (
+    taskId: string,
+    title: string,
+    description: string,
+    priority: "Low" | "Medium" | "High"
+  ) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
