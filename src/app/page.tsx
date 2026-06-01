@@ -175,6 +175,17 @@ export default function Home() {
     );
   }
 
+  function handleCreateColumn() {
+    setColumns((currentColumns) => [
+      ...currentColumns,
+      {
+        id: crypto.randomUUID(),
+        title: "New Column",
+        tasks: [],
+      },
+    ]);
+  }
+
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
@@ -186,7 +197,7 @@ export default function Home() {
             </p>
           </div>
 
-          <Button>Create Board</Button>
+          <Button onClick={handleCreateColumn}>Add Column</Button>
         </header>
 
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
