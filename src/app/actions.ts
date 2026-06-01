@@ -21,3 +21,25 @@ export async function createTask(columnId: string, title: string) {
 
     revalidatePath("/");
 }
+
+export async function updateTask(
+    taskId: string,
+    title: string,
+    description: string,
+    priority: "Low" | "Medium" | "High",
+    dueDate: string
+) {
+    await prisma.task.update({
+        where: {
+            id: taskId,
+        },
+        data: {
+            title,
+            description: description || null,
+            priority,
+            dueDate: dueDate || null,
+        },
+    });
+
+    revalidatePath("/");
+}
