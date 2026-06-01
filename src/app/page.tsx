@@ -1,11 +1,48 @@
 import KanbanBoard from "@/components/board/KanbanBoard";
-import { mockColumns } from "@/data/mock-board";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const board = await prisma.board.findFirst({
+    include: {
+      columns: {
+        orderBy: {
+          order: "asc",
+        },
+        include: {
+          tasks: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!board) {
+    return (
+      <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
+        <p>No board found. Run the seed file first.</p>
+      </main>
+    );
+  }
+
+  const columns = board.columns.map((column) => ({
+    id: column.id,
+    title: column.title,
+    tasks: column.tasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description ?? undefined,
+      priority: task.priority as "Low" | "Medium" | "High",
+      dueDate: task.dueDate ?? undefined,
+    })),
+  }));
+
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
-        <KanbanBoard initialColumns={mockColumns} />
+        <KanbanBoard initialColumns={columns} />
       </div>
     </main>
   );
