@@ -38,16 +38,19 @@ export default function Home() {
     if (!over) return;
 
     const activeTaskId = active.id.toString();
-    const overTaskId = over.id.toString();
+    const overId = over.id.toString();
 
-    if (activeTaskId === overTaskId) return;
+    if (activeTaskId === overId) return;
 
     const activeColumn = findColumnByTaskId(activeTaskId);
-    const overColumn = findColumnByTaskId(overTaskId);
+    const overColumn =
+      findColumnByTaskId(overId) ?? columns.find((column) => column.id === overId);
 
     if (!activeColumn || !overColumn) return;
 
     if (activeColumn.id === overColumn.id) {
+      if (overId === overColumn.id) return;
+
       setColumns((currentColumns) =>
         currentColumns.map((column) => {
           if (column.id !== activeColumn.id) return column;
@@ -55,9 +58,8 @@ export default function Home() {
           const oldIndex = column.tasks.findIndex(
             (task) => task.id === activeTaskId
           );
-          const newIndex = column.tasks.findIndex(
-            (task) => task.id === overTaskId
-          );
+
+          const newIndex = column.tasks.findIndex((task) => task.id === overId);
 
           return {
             ...column,
@@ -74,9 +76,10 @@ export default function Home() {
         column.tasks.some((task) => task.id === activeTaskId)
       );
 
-      const destinationColumn = currentColumns.find((column) =>
-        column.tasks.some((task) => task.id === overTaskId)
-      );
+      const destinationColumn =
+        currentColumns.find((column) =>
+          column.tasks.some((task) => task.id === overId)
+        ) ?? currentColumns.find((column) => column.id === overId);
 
       if (!sourceColumn || !destinationColumn) return currentColumns;
 
@@ -86,9 +89,10 @@ export default function Home() {
 
       if (!activeTask) return currentColumns;
 
-      const destinationIndex = destinationColumn.tasks.findIndex(
-        (task) => task.id === overTaskId
-      );
+      const destinationIndex =
+        destinationColumn.id === overId
+          ? destinationColumn.tasks.length
+          : destinationColumn.tasks.findIndex((task) => task.id === overId);
 
       return currentColumns.map((column) => {
         if (column.id === sourceColumn.id) {

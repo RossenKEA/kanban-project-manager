@@ -3,6 +3,7 @@ import SortableTaskCard from "@/components/task/SortableTaskCard";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import CreateTaskDialog from "@/components/task/CreateTaskDialog";
 import { Column } from "@/types/kanban";
+import { useDroppable } from "@dnd-kit/core";
 
 interface BoardColumnProps {
   column: Column;
@@ -22,6 +23,9 @@ export default function BoardColumn({
   onUpdateTask,
   onDeleteTask,
 }: BoardColumnProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id,
+  });
   return (
     <Card className="w-80 shrink-0 bg-zinc-900 border-zinc-800">
       <CardHeader className="flex flex-row items-start justify-between">
@@ -42,7 +46,12 @@ export default function BoardColumn({
         items={column.tasks.map((task) => task.id)}
         strategy={verticalListSortingStrategy}
       >
-        <CardContent className="space-y-3">
+        <CardContent
+          ref={setNodeRef}
+          className={`min-h-40 space-y-3 rounded-b-xl transition ${
+            isOver ? "bg-zinc-800/60" : ""
+          }`}
+        >
           {column.tasks.map((task) => (
             <SortableTaskCard
               key={task.id}
