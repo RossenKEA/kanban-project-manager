@@ -45,6 +45,11 @@ export default function TaskCard({
         onClick={() => setOpen(true)}
         className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-4 text-left text-sm text-zinc-200 transition hover:border-zinc-700 hover:bg-zinc-900"
       >
+        {task.priority && (
+          <span className="mb-2 inline-flex rounded-full border border-zinc-700 px-2 py-0.5 text-xs text-zinc-300">
+            {task.priority}
+          </span>
+        )}
         <p>{task.title}</p>
 
         {task.description && (
@@ -59,7 +64,7 @@ export default function TaskCard({
           <DialogHeader>
             <DialogTitle>Edit task</DialogTitle>
           </DialogHeader>
-
+          
           <div className="space-y-4">
             <Input
               value={title}

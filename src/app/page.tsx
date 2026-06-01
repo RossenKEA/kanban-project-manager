@@ -129,6 +129,7 @@ export default function Home() {
             {
               id: crypto.randomUUID(),
               title,
+              priority: "Medium",
             },
           ],
         };
