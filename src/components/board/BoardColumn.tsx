@@ -13,9 +13,15 @@ export default function BoardColumn({
   onCreateTask,
 }: BoardColumnProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 text-zinc-300">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>{column.title}</CardTitle>
+    <Card className="w-80 shrink-0 bg-zinc-900 border-zinc-800">
+      <CardHeader className="flex flex-row items-start justify-between">
+        <CardTitle className="text-zinc-100">
+            {column.title}
+        </CardTitle>
+
+        <p className="text-xs text-zinc-500">
+            {column.tasks.length} tasks
+        </p>
 
         <CreateTaskDialog
           onCreateTask={(title) => onCreateTask(column.id, title)}

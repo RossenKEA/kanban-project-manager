@@ -33,8 +33,8 @@ export default function CreateTaskDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="secondary">
-  Add Task
-</Button>
+            Add Task
+        </Button>
       </DialogTrigger>
 
       <DialogContent>

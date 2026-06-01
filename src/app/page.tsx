@@ -42,7 +42,7 @@ export default function Home() {
           <Button>Create Board</Button>
         </header>
 
-        <section className="grid gap-6 md:grid-cols-3">
+        <section className="flex gap-6 overflow-x-auto pb-4">
           {columns.map((column) => (
             <BoardColumn
               key={column.id}
