@@ -42,6 +42,7 @@ export default function BoardColumn({
           <Input
             autoFocus
             value={title}
+            className="text-zinc-100"
             onChange={(e) => setTitle(e.target.value)}
             onBlur={() => {
               onRenameColumn(column.id, title.trim() || "Untitled");
