@@ -49,6 +49,12 @@ export default function TaskCard({
     setOpen(false);
   }
 
+  const priorityStyles = {
+    Low: "border-green-700 bg-green-950 text-green-300",
+    Medium: "border-yellow-700 bg-yellow-950 text-yellow-300",
+    High: "border-red-700 bg-red-950 text-red-300",
+  };
+
   return (
     <>
       <button
@@ -56,7 +62,11 @@ export default function TaskCard({
         className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-4 text-left text-sm text-zinc-200 transition hover:border-zinc-700 hover:bg-zinc-900"
       >
         {task.priority && (
-          <span className="mb-2 inline-flex rounded-full border border-zinc-700 px-2 py-0.5 text-xs text-zinc-300">
+          <span
+            className={`mb-2 inline-flex rounded-full border px-2 py-0.5 text-xs ${
+              priorityStyles[task.priority]
+            }`}
+          >
             {task.priority}
           </span>
         )}
