@@ -297,6 +297,19 @@ export default function KanbanBoard({
             </section>
           </DndContext>
         </ClientOnly>
+
+        <footer className="mt-12 border-t border-zinc-800 pt-6 text-center text-sm text-zinc-500">
+          Built with Next.js, TypeScript, Prisma, SQLite, Tailwind CSS,
+          shadcn/ui, and dnd-kit ·{" "}
+          <a
+            href="https://github.com/RossenKEA/kanban-project-manager"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-300 hover:text-white"
+          >
+            View Source
+          </a>
+        </footer>
       </div>
     </main>
   );
