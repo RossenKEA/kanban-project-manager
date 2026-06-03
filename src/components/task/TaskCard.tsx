@@ -94,7 +94,7 @@ export default function TaskCard({
 
         {task.dueDate && (
           <p className="mt-2 text-xs text-zinc-500">
-            Due {task.dueDate}
+            Due {new Date(task.dueDate).toLocaleDateString()}
           </p>
         )}
 
