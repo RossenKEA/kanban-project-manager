@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, updateTaskPosition, } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, updateTaskOrder, } from "@/app/actions";
 
 interface KanbanBoardProps {
   boardId: string;
@@ -57,61 +57,46 @@ export default function KanbanBoard({
 
     if (!activeColumn || !overColumn) return;
 
+    let nextColumns = columns;
+
     if (activeColumn.id === overColumn.id) {
       if (overId === overColumn.id) return;
 
-      setColumns((currentColumns) =>
-        currentColumns.map((column) => {
-          if (column.id !== activeColumn.id) return column;
+      nextColumns = columns.map((column) => {
+        if (column.id !== activeColumn.id) return column;
 
-          const oldIndex = column.tasks.findIndex(
-            (task) => task.id === activeTaskId
-          );
+        const oldIndex = column.tasks.findIndex(
+          (task) => task.id === activeTaskId
+        );
 
-          const newIndex = column.tasks.findIndex((task) => task.id === overId);
+        const newIndex = column.tasks.findIndex((task) => task.id === overId);
 
-          return {
-            ...column,
-            tasks: arrayMove(column.tasks, oldIndex, newIndex),
-          };
-        })
-      );
-
-      return;
-    }
-
-    setColumns((currentColumns) => {
-      const sourceColumn = currentColumns.find((column) =>
-        column.tasks.some((task) => task.id === activeTaskId)
-      );
-
-      const destinationColumn =
-        currentColumns.find((column) =>
-          column.tasks.some((task) => task.id === overId)
-        ) ?? currentColumns.find((column) => column.id === overId);
-
-      if (!sourceColumn || !destinationColumn) return currentColumns;
-
-      const activeTask = sourceColumn.tasks.find(
+        return {
+          ...column,
+          tasks: arrayMove(column.tasks, oldIndex, newIndex),
+        };
+      });
+    } else {
+      const activeTask = activeColumn.tasks.find(
         (task) => task.id === activeTaskId
       );
 
-      if (!activeTask) return currentColumns;
+      if (!activeTask) return;
 
       const destinationIndex =
-        destinationColumn.id === overId
-          ? destinationColumn.tasks.length
-          : destinationColumn.tasks.findIndex((task) => task.id === overId);
+        overColumn.id === overId
+          ? overColumn.tasks.length
+          : overColumn.tasks.findIndex((task) => task.id === overId);
 
-      return currentColumns.map((column) => {
-        if (column.id === sourceColumn.id) {
+      nextColumns = columns.map((column) => {
+        if (column.id === activeColumn.id) {
           return {
             ...column,
             tasks: column.tasks.filter((task) => task.id !== activeTaskId),
           };
         }
 
-        if (column.id === destinationColumn.id) {
+        if (column.id === overColumn.id) {
           const newTasks = [...column.tasks];
           newTasks.splice(destinationIndex, 0, activeTask);
 
@@ -123,9 +108,18 @@ export default function KanbanBoard({
 
         return column;
       });
-    });
+    }
 
-    await updateTaskPosition(activeTaskId, overColumn.id, 0);
+    setColumns(nextColumns);
+
+    await updateTaskOrder(
+      nextColumns.map((column) => ({
+        id: column.id,
+        tasks: column.tasks.map((task) => ({
+          id: task.id,
+        })),
+      }))
+    );
   }
 
   async function handleCreateTask(columnId: string, title: string) {

@@ -99,20 +99,29 @@ export async function deleteColumn(columnId: string) {
     revalidatePath("/");
 }
 
-export async function updateTaskPosition(
-    taskId: string,
-    columnId: string,
-    order: number
+export async function updateTaskOrder(
+    columns: {
+        id: string;
+        tasks: {
+            id: string;
+        }[];
+    }[]
 ) {
-    await prisma.task.update({
-        where: {
-            id: taskId,
-        },
-        data: {
-            columnId,
-            order,
-        },
-    });
+    await prisma.$transaction(
+        columns.flatMap((column) =>
+            column.tasks.map((task, index) =>
+                prisma.task.update({
+                    where: {
+                        id: task.id,
+                    },
+                    data: {
+                        columnId: column.id,
+                        order: index,
+                    },
+                })
+            )
+        )
+    );
 
     revalidatePath("/");
 }
