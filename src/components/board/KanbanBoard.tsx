@@ -270,8 +270,10 @@ export default function KanbanBoard({
                 {title}
               </h1>
             )}
-            <p className="text-zinc-400">
-              Organize projects, tasks, and workflows.
+            <p className="max-w-3xl text-zinc-400">
+              Portfolio project demonstrating full-stack CRUD operations,
+              drag-and-drop persistence, Prisma ORM, Next.js Server Actions,
+              and a database-backed Kanban workflow.
             </p>
           </div>
 
