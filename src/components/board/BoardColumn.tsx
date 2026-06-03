@@ -50,69 +50,74 @@ export default function BoardColumn({
   const [title, setTitle] = useState(column.title);
   return (
     <Card className="w-[280px] shrink-0 border-zinc-800 bg-zinc-900 sm:w-80">
-      <CardHeader className="flex flex-row items-start justify-between">
-        {editingTitle ? (
-          <Input
-            autoFocus
-            value={title}
-            className="text-zinc-100"
-            onChange={(e) => setTitle(e.target.value)}
-            onBlur={() => {
-              onRenameColumn(column.id, title.trim() || "Untitled");
-              setEditingTitle(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                onRenameColumn(column.id, title.trim() || "Untitled");
-                setEditingTitle(false);
-              }
-            }}
-          />
-        ) : (
-          <CardTitle
-            className="cursor-pointer text-zinc-100"
-            onClick={() => setEditingTitle(true)}
-          >
-            {column.title}
-          </CardTitle>
-        )}
+      <CardHeader className="space-y-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            {editingTitle ? (
+              <Input
+                autoFocus
+                value={title}
+                className="text-zinc-100"
+                onChange={(e) => setTitle(e.target.value)}
+                onBlur={() => {
+                  onRenameColumn(column.id, title.trim() || "Untitled");
+                  setEditingTitle(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    onRenameColumn(column.id, title.trim() || "Untitled");
+                    setEditingTitle(false);
+                  }
+                }}
+              />
+            ) : (
+              <CardTitle
+                className="cursor-pointer break-words text-zinc-100"
+                onClick={() => setEditingTitle(true)}
+              >
+                {column.title}
+              </CardTitle>
+            )}
 
-        <p className="text-xs text-zinc-500">
-            {column.tasks.length} tasks
-        </p>
+            <p className="mt-1 text-xs text-zinc-500">
+                {column.tasks.length} tasks
+            </p>
+          </div>
+          
 
-        <div className="flex gap-2">
-          <CreateTaskDialog
-            onCreateTask={(title) => onCreateTask(column.id, title)}
-          />
+          <div className="flex shrink-0 gap-2">
+            <CreateTaskDialog
+              onCreateTask={(title) => onCreateTask(column.id, title)}
+            />
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button size="sm" variant="destructive">
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete this column?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete the column and all tasks inside it.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-
-                <AlertDialogAction
-                  onClick={() => onDeleteColumn(column.id)}
-                  className="bg-red-600 text-white hover:bg-red-700"
-                >
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="destructive">
                   Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+                </Button>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete this column?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete the column and all tasks inside it.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                  <AlertDialogAction
+                    onClick={() => onDeleteColumn(column.id)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </CardHeader>
 
