@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, updateTaskPosition, } from "@/app/actions";
 
 interface KanbanBoardProps {
   boardId: string;
@@ -41,7 +41,7 @@ export default function KanbanBoard({
     );
   }
 
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
     if (!over) return;
@@ -124,6 +124,8 @@ export default function KanbanBoard({
         return column;
       });
     });
+
+    await updateTaskPosition(activeTaskId, overColumn.id, 0);
   }
 
   async function handleCreateTask(columnId: string, title: string) {

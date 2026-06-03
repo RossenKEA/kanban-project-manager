@@ -96,3 +96,21 @@ export async function deleteColumn(columnId: string) {
 
     revalidatePath("/");
 }
+
+export async function updateTaskPosition(
+    taskId: string,
+    columnId: string,
+    order: number
+) {
+    await prisma.task.update({
+        where: {
+            id: taskId,
+        },
+        data: {
+            columnId,
+            order,
+        },
+    });
+
+    revalidatePath("/");
+}
