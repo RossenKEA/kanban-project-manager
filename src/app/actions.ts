@@ -125,3 +125,16 @@ export async function updateTaskOrder(
 
     revalidatePath("/");
 }
+
+export async function renameBoard(boardId: string, title: string) {
+    await prisma.board.update({
+        where: {
+            id: boardId,
+        },
+        data: {
+            title,
+        },
+    });
+
+    revalidatePath("/");
+}

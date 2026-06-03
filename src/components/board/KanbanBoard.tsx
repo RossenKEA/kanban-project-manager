@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, updateTaskOrder, } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, updateTaskOrder, renameBoard, } from "@/app/actions";
 
 interface KanbanBoardProps {
   boardId: string;
@@ -28,6 +28,9 @@ export default function KanbanBoard({
   initialColumns,
 }: KanbanBoardProps) {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
+
+  const [title, setTitle] = useState(boardTitle);
+  const [editingBoardTitle, setEditingBoardTitle] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -238,7 +241,35 @@ export default function KanbanBoard({
 
         <header className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">{boardTitle}</h1>
+            {editingBoardTitle ? (
+              <input
+                autoFocus
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onBlur={async () => {
+                  const finalTitle = title.trim() || "Untitled Board";
+                  setTitle(finalTitle);
+                  setEditingBoardTitle(false);
+                  await renameBoard(boardId, finalTitle);
+                }}
+                onKeyDown={async (e) => {
+                  if (e.key === "Enter") {
+                    const finalTitle = title.trim() || "Untitled Board";
+                    setTitle(finalTitle);
+                    setEditingBoardTitle(false);
+                    await renameBoard(boardId, finalTitle);
+                  }
+                }}
+                className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-1 text-3xl font-bold text-zinc-100"
+              />
+            ) : (
+              <h1
+                className="cursor-pointer text-3xl font-bold"
+                onClick={() => setEditingBoardTitle(true)}
+              >
+                {title}
+              </h1>
+            )}
             <p className="text-zinc-400">
               Organize projects, tasks, and workflows.
             </p>
