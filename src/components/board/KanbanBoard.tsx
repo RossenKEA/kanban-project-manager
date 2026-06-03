@@ -18,11 +18,13 @@ import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, r
 
 interface KanbanBoardProps {
   boardId: string;
+  boardTitle: string;
   initialColumns: Column[];
 }
 
 export default function KanbanBoard({
   boardId,
+  boardTitle,
   initialColumns,
 }: KanbanBoardProps) {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
@@ -236,7 +238,7 @@ export default function KanbanBoard({
 
         <header className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Kanban Project Manager</h1>
+            <h1 className="text-3xl font-bold">{boardTitle}</h1>
             <p className="text-zinc-400">
               Organize projects, tasks, and workflows.
             </p>
