@@ -95,6 +95,11 @@ export default function BoardColumn({
             isOver ? "bg-zinc-800/60" : ""
           }`}
         >
+          {column.tasks.length === 0 && (
+            <p className="rounded-lg border border-dashed border-zinc-700 p-4 text-center text-sm text-zinc-500">
+              Drop tasks here or add a new one.
+            </p>
+          )}
           {column.tasks.map((task) => (
             <SortableTaskCard
               key={task.id}
