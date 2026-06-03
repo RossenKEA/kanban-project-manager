@@ -7,6 +7,17 @@ import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface BoardColumnProps {
   column: Column;
@@ -75,13 +86,33 @@ export default function BoardColumn({
             onCreateTask={(title) => onCreateTask(column.id, title)}
           />
 
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => onDeleteColumn(column.id)}
-          >
-            Delete
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button size="sm" variant="destructive">
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete this column?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete the column and all tasks inside it.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                <AlertDialogAction
+                  onClick={() => onDeleteColumn(column.id)}
+                  className="bg-red-600 text-white hover:bg-red-700"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardHeader>
 
