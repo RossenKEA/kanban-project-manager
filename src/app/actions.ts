@@ -73,3 +73,16 @@ export async function createColumn(boardId: string) {
 
     return column;
 }
+
+export async function renameColumn(columnId: string, title: string) {
+    await prisma.column.update({
+        where: {
+            id: columnId,
+        },
+        data: {
+            title,
+        },
+    });
+
+    revalidatePath("/");
+}
