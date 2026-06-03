@@ -80,7 +80,8 @@ export default function BoardColumn({
             )}
 
             <p className="mt-1 text-xs text-zinc-500">
-                {column.tasks.length} tasks
+                {column.tasks.length} task
+                {column.tasks.length !== 1 ? "s" : ""}
             </p>
           </div>
           
