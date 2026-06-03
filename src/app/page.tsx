@@ -42,7 +42,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
-        <KanbanBoard initialColumns={columns} />
+        <KanbanBoard boardId={board.id} initialColumns={columns} />
       </div>
     </main>
   );

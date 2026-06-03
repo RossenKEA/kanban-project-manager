@@ -53,3 +53,23 @@ export async function deleteTask(taskId: string) {
 
     revalidatePath("/");
 }
+
+export async function createColumn(boardId: string) {
+    const columnCount = await prisma.column.count({
+        where: {
+            boardId,
+        },
+    });
+
+    const column = await prisma.column.create({
+        data: {
+            title: "New Column",
+            order: columnCount,
+            boardId,
+        },
+    });
+
+    revalidatePath("/");
+
+    return column;
+}

@@ -14,13 +14,17 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask, deleteTask as deleteTaskAction, } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, } from "@/app/actions";
 
 interface KanbanBoardProps {
+  boardId: string;
   initialColumns: Column[];
 }
 
-export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
+export default function KanbanBoard({
+  boardId,
+  initialColumns,
+}: KanbanBoardProps) {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
 
   const sensors = useSensors(
@@ -187,12 +191,14 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
     await deleteTaskAction(taskId);
   }
 
-  function handleCreateColumn() {
+  async function handleCreateColumn() {
+    const newColumn = await createColumn(boardId);
+
     setColumns((currentColumns) => [
       ...currentColumns,
       {
-        id: crypto.randomUUID(),
-        title: "New Column",
+        id: newColumn.id,
+        title: newColumn.title,
         tasks: [],
       },
     ]);
@@ -224,7 +230,7 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
           Demo board: changes are saved to the database, but this board resets regularly
           to prevent abuse.
         </div>
-        
+
         <header className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Kanban Project Manager</h1>
