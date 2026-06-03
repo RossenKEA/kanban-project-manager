@@ -32,7 +32,7 @@ interface TaskCardProps {
     priority: "Low" | "Medium" | "High",
     dueDate: string
   ) => Promise<void>;
-  onDeleteTask: (taskId: string) => void;
+  onDeleteTask: (taskId: string) => Promise<void>;
 }
 
 export default function TaskCard({
@@ -48,6 +48,7 @@ export default function TaskCard({
   );
   const [dueDate, setDueDate] = useState(task.dueDate ?? "");
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   async function handleSave() {
     if (!title.trim()) return;
@@ -60,8 +61,12 @@ export default function TaskCard({
     setOpen(false);
   }
 
-  function handleDelete() {
-    onDeleteTask(task.id);
+  async function handleDelete() {
+    setDeleting(true);
+
+    await onDeleteTask(task.id);
+
+    setDeleting(false);
     setOpen(false);
   }
 
@@ -160,8 +165,8 @@ export default function TaskCard({
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
 
-                    <AlertDialogAction onClick={handleDelete} className="bg-red-600 text-white hover:bg-red-700">
-                      Delete
+                    <AlertDialogAction onClick={handleDelete} className="bg-red-600 text-white hover:bg-red-700" disabled={deleting}>
+                      {deleting ? "Deleting..." : "Delete"}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

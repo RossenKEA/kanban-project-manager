@@ -14,7 +14,7 @@ interface SortableTaskCardProps {
     priority: "Low" | "Medium" | "High",
     dueDate: string
   ) => Promise<void>;
-  onDeleteTask: (taskId: string) => void;
+  onDeleteTask: (taskId: string) => Promise<void>;
 }
 
 export default function SortableTaskCard({
