@@ -86,3 +86,13 @@ export async function renameColumn(columnId: string, title: string) {
 
     revalidatePath("/");
 }
+
+export async function deleteColumn(columnId: string) {
+    await prisma.column.delete({
+        where: {
+            id: columnId,
+        },
+    });
+
+    revalidatePath("/");
+}

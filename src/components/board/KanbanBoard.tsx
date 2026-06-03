@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import BoardColumn from "@/components/board/BoardColumn";
 import { Column } from "@/types/kanban";
 import ClientOnly from "@/components/ClientOnly";
-import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, } from "@/app/actions";
+import { createTask, updateTask, deleteTask as deleteTaskAction, createColumn, renameColumn, deleteColumn as deleteColumnAction, } from "@/app/actions";
 
 interface KanbanBoardProps {
   boardId: string;
@@ -204,10 +204,12 @@ export default function KanbanBoard({
     ]);
   }
 
-  function handleDeleteColumn(columnId: string) {
+  async function handleDeleteColumn(columnId: string) {
     setColumns((currentColumns) =>
       currentColumns.filter((column) => column.id !== columnId)
     );
+
+    await deleteColumnAction(columnId);
   }
 
   async function handleRenameColumn(columnId: string, title: string) {
