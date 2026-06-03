@@ -129,11 +129,7 @@ export default function KanbanBoard({
   }
 
   async function handleCreateTask(columnId: string, title: string) {
-    const newTask = {
-      id: crypto.randomUUID(),
-      title,
-      priority: "Medium" as const,
-    };
+    const createdTask = await createTask(columnId, title);
 
     setColumns((currentColumns) =>
       currentColumns.map((column) => {
@@ -141,12 +137,19 @@ export default function KanbanBoard({
 
         return {
           ...column,
-          tasks: [...column.tasks, newTask],
+          tasks: [
+            ...column.tasks,
+            {
+              id: createdTask.id,
+              title: createdTask.title,
+              description: createdTask.description ?? undefined,
+              priority: createdTask.priority as "Low" | "Medium" | "High",
+              dueDate: createdTask.dueDate ?? undefined,
+            },
+          ],
         };
       })
     );
-
-    await createTask(columnId, title);
   }
 
   async function handleUpdateTask(

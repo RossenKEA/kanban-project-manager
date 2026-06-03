@@ -10,7 +10,7 @@ export async function createTask(columnId: string, title: string) {
         },
     });
 
-    await prisma.task.create({
+    const task = await prisma.task.create({
         data: {
             title,
             priority: "Medium",
@@ -20,6 +20,8 @@ export async function createTask(columnId: string, title: string) {
     });
 
     revalidatePath("/");
+
+    return task;
 }
 
 export async function updateTask(
