@@ -1,5 +1,6 @@
 import KanbanBoard from "@/components/board/KanbanBoard";
 import { prisma } from "@/lib/prisma";
+import { Column as KanbanColumn } from "@/types/kanban";
 
 export default async function Home() {
   const board = await prisma.board.findFirst({
@@ -27,17 +28,21 @@ export default async function Home() {
     );
   }
 
-  const columns = board.columns.map((column) => ({
-    id: column.id,
-    title: column.title,
-    tasks: column.tasks.map((task) => ({
-      id: task.id,
-      title: task.title,
-      description: task.description ?? undefined,
-      priority: task.priority as "Low" | "Medium" | "High",
-      dueDate: task.dueDate ?? undefined,
-    })),
-  }));
+  const columns: KanbanColumn[] = board.columns.map(
+    (column: typeof board.columns[number]) => ({
+      id: column.id,
+      title: column.title,
+      tasks: column.tasks.map(
+        (task: typeof column.tasks[number]) => ({
+          id: task.id,
+          title: task.title,
+          description: task.description ?? undefined,
+          priority: task.priority as "Low" | "Medium" | "High",
+          dueDate: task.dueDate ?? undefined,
+        })
+      ),
+    })
+  );
 
   return (
     <main className="min-h-screen bg-zinc-950 px-4 py-6 text-zinc-50 sm:px-8">
