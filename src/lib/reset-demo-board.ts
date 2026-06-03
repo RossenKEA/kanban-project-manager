@@ -1,14 +1,6 @@
-import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { prisma } from "@/lib/prisma";
 
-const adapter = new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL ?? "file:./dev.db",
-});
-
-const prisma = new PrismaClient({ adapter });
-
-async function main() {
+export async function resetDemoBoard() {
     await prisma.task.deleteMany();
     await prisma.column.deleteMany();
     await prisma.board.deleteMany();
@@ -35,21 +27,33 @@ async function main() {
                     {
                         title: "In Progress",
                         order: 1,
+                        tasks: {
+                            create: [
+                                {
+                                    title: "Connect Prisma database",
+                                    description: "Load board data from SQLite through Prisma.",
+                                    priority: "Medium",
+                                    order: 0,
+                                },
+                            ],
+                        },
                     },
                     {
                         title: "Done",
                         order: 2,
+                        tasks: {
+                            create: [
+                                {
+                                    title: "Build drag and drop UI",
+                                    description: "Move tasks between columns using dnd-kit.",
+                                    priority: "High",
+                                    order: 0,
+                                },
+                            ],
+                        },
                     },
                 ],
             },
         },
     });
-
-    console.log("Demo board reset.");
 }
-
-main()
-    .catch(console.error)
-    .finally(async () => {
-        await prisma.$disconnect();
-    });

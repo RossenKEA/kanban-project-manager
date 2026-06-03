@@ -220,6 +220,11 @@ export default function KanbanBoard({ initialColumns }: KanbanBoardProps) {
   return (
     <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
       <div className="mx-auto max-w-7xl">
+        <div className="mb-6 rounded-lg border border-yellow-700 bg-yellow-950/40 p-4 text-sm text-yellow-200">
+          Demo board: changes are saved to the database, but this board resets regularly
+          to prevent abuse.
+        </div>
+        
         <header className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Kanban Project Manager</h1>
