@@ -29,7 +29,7 @@ interface BoardColumnProps {
     description: string,
     priority: "Low" | "Medium" | "High",
     dueDate: string
-  ) => void;
+  ) => Promise<void>;
   onDeleteTask: (columnId: string, taskId: string) => void;
   onDeleteColumn: (columnId: string) => void;
   onRenameColumn: (columnId: string, title: string) => void;

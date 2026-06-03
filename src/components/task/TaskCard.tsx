@@ -31,7 +31,7 @@ interface TaskCardProps {
     description: string,
     priority: "Low" | "Medium" | "High",
     dueDate: string
-  ) => void;
+  ) => Promise<void>;
   onDeleteTask: (taskId: string) => void;
 }
 
@@ -47,11 +47,16 @@ export default function TaskCard({
     task.priority ?? "Medium"
   );
   const [dueDate, setDueDate] = useState(task.dueDate ?? "");
+  const [saving, setSaving] = useState(false);
 
-  function handleSave() {
+  async function handleSave() {
     if (!title.trim()) return;
 
-    onUpdateTask(task.id, title, description, priority, dueDate);
+    setSaving(true);
+
+    await onUpdateTask(task.id, title, description, priority, dueDate);
+
+    setSaving(false);
     setOpen(false);
   }
 
@@ -162,7 +167,9 @@ export default function TaskCard({
                 </AlertDialogContent>
               </AlertDialog>
 
-              <Button onClick={handleSave}>Save changes</Button>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? "Saving..." : "Save changes"}
+              </Button>
             </div>
           </div>
         </DialogContent>
