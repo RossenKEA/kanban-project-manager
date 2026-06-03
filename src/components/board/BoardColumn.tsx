@@ -49,7 +49,7 @@ export default function BoardColumn({
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(column.title);
   return (
-    <Card className="w-80 shrink-0 bg-zinc-900 border-zinc-800">
+    <Card className="w-[280px] shrink-0 border-zinc-800 bg-zinc-900 sm:w-80">
       <CardHeader className="flex flex-row items-start justify-between">
         {editingTitle ? (
           <Input

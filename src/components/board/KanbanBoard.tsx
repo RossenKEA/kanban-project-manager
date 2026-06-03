@@ -239,7 +239,7 @@ export default function KanbanBoard({
           to prevent abuse.
         </div>
 
-        <header className="mb-8 flex items-center justify-between">
+        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             {editingBoardTitle ? (
               <input
@@ -277,12 +277,14 @@ export default function KanbanBoard({
             </p>
           </div>
 
-          <Button onClick={handleCreateColumn}>Add Column</Button>
+          <Button onClick={handleCreateColumn} className="w-full sm:w-auto">
+            Add Column
+          </Button>
         </header>
 
         <ClientOnly>
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <section className="flex gap-6 overflow-x-auto pb-4">
+            <section className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:gap-6 sm:px-0">
               {columns.map((column) => (
                 <BoardColumn
                   key={column.id}
@@ -298,7 +300,7 @@ export default function KanbanBoard({
           </DndContext>
         </ClientOnly>
 
-        <footer className="mt-12 border-t border-zinc-800 pt-6 text-center text-sm text-zinc-500">
+        <footer className="mt-12 border-t border-zinc-800 px-2 pt-6 text-center text-xs leading-6 text-zinc-500 sm:text-sm">
           Built with Next.js, TypeScript, Prisma, SQLite, Tailwind CSS,
           shadcn/ui, and dnd-kit ·{" "}
           <a

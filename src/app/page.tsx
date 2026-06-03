@@ -40,7 +40,7 @@ export default async function Home() {
   }));
 
   return (
-    <main className="min-h-screen bg-zinc-950 p-8 text-zinc-50">
+    <main className="min-h-screen bg-zinc-950 px-4 py-6 text-zinc-50 sm:px-8">
       <div className="mx-auto max-w-7xl">
         <KanbanBoard
           boardId={board.id}
