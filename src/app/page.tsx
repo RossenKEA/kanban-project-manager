@@ -2,6 +2,9 @@ import KanbanBoard from "@/components/board/KanbanBoard";
 import { prisma } from "@/lib/prisma";
 import { Column as KanbanColumn } from "@/types/kanban";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Home() {
   const board = await prisma.board.findFirst({
     include: {
